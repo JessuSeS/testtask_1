@@ -63,3 +63,84 @@ INSERT INTO `agency_hotel_options` (`id`,`hotel_id`,`agency_id`,`percent`,`is_bl
 (18,8,2,12,0,0,0),
 (19,9,2,10,1,0,0),
 (20,10,2,14,1,0,0);
+
+INSERT INTO php_test.operators (id, `key`, name) VALUES
+(1, 'equal', 'равно'),
+(2, 'not_equal', 'не равно'),
+(3, 'less', 'меньше'),
+(4, 'over', 'больше');
+
+INSERT INTO conditions_templates (name, table_name, column_name) VALUES
+('Страна отеля', 'countries', 'id'),
+('Город отеля', 'cities', 'id'),
+('Звездность отеля', 'hotels', 'stars'),
+('Комиссия в договоре', 'hotel_agreements', 'discount_percent'),
+('Скидка в договоре', 'hotel_agreements', 'comission_percent'),
+('Договор по умолчанию', 'hotel_agreements', 'is_default'),
+('Компания в договоре с отелем', 'hotel_agreements', 'company_id'),
+('Черный список', 'agency_hotel_options', 'is_black'),
+('Рекомендованный отель', 'agency_hotel_options', 'is_recomend'),
+('Белый список', 'agency_hotel_options', 'is_white');
+
+INSERT INTO available_operators (condition_id, operator_id)
+VALUES
+((SELECT id FROM conditions_templates WHERE name = 'Страна отеля'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Страна отеля'), 2),
+
+((SELECT id FROM conditions_templates WHERE name = 'Город отеля'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Город отеля'), 2),
+
+((SELECT id FROM conditions_templates WHERE name = 'Звездность отеля'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Звездность отеля'), 2),
+
+((SELECT id FROM conditions_templates WHERE name = 'Комиссия в договоре'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Комиссия в договоре'), 2),
+((SELECT id FROM conditions_templates WHERE name = 'Комиссия в договоре'), 3),
+((SELECT id FROM conditions_templates WHERE name = 'Комиссия в договоре'), 4),
+
+((SELECT id FROM conditions_templates WHERE name = 'Скидка в договоре'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Скидка в договоре'), 2),
+((SELECT id FROM conditions_templates WHERE name = 'Скидка в договоре'), 3),
+((SELECT id FROM conditions_templates WHERE name = 'Скидка в договоре'), 4),
+
+((SELECT id FROM conditions_templates WHERE name = 'Договор по умолчанию'), 1),
+
+((SELECT id FROM conditions_templates WHERE name = 'Компания в договоре с отелем'), 1),
+((SELECT id FROM conditions_templates WHERE name = 'Компания в договоре с отелем'), 2),
+
+((SELECT id FROM conditions_templates WHERE name = 'Черный список'), 1),
+
+((SELECT id FROM conditions_templates WHERE name = 'Рекомендованный отель'), 1),
+
+((SELECT id FROM conditions_templates WHERE name = 'Белый список'), 1);
+
+
+INSERT INTO rules (name, agency_id, text_for_manager)
+VALUES
+    ('Отель должен быть в России', 1, 'Проверить, что отель находится в России и в Санкт-Петербурге'),
+    ('Отель не должен быть в черном списке', 2, 'Проверить, что отель не в черном списке'),
+    ('Отель должен быть в Санкт-Петербурге', 1, 'Проверить, что отель расположен в Санкт-Петербурге'),
+    ('Минимальная звездность отеля 4', 2, 'Проверить, что отель имеет минимум 4 звезды и не находится в черном списке'),
+    ('Комиссия в договоре не менее 10%', 1, 'Проверить, что комиссия по договору не ниже 10%');
+
+INSERT INTO conditions (template_id, operator_id, value)
+VALUES
+    ((SELECT id FROM conditions_templates WHERE name = 'Страна отеля'), (SELECT id FROM operators WHERE `key` = 'equal'), '1'),
+    ((SELECT id FROM conditions_templates WHERE name = 'Черный список'), (SELECT id FROM operators WHERE `key` = 'equal'), '0'),
+    ((SELECT id FROM conditions_templates WHERE name = 'Город отеля'), (SELECT id FROM operators WHERE `key` = 'equal'), '2'),
+    ((SELECT id FROM conditions_templates WHERE name = 'Звездность отеля'), (SELECT id FROM operators WHERE `key` = 'over'), '3'),
+    ((SELECT id FROM conditions_templates WHERE name = 'Комиссия в договоре'), (SELECT id FROM operators WHERE `key` = 'over'), '9');
+
+INSERT INTO rules_conditions (rule_id, condition_id)
+VALUES
+    ((SELECT id FROM rules WHERE name = 'Отель должен быть в России'), (SELECT id FROM conditions WHERE value = '1')),
+    ((SELECT id FROM rules WHERE name = 'Отель должен быть в России'), (SELECT id FROM conditions WHERE value = '2')),
+
+    ((SELECT id FROM rules WHERE name = 'Отель не должен быть в черном списке'), (SELECT id FROM conditions WHERE value = '0')),
+
+    ((SELECT id FROM rules WHERE name = 'Отель должен быть в Санкт-Петербурге'), (SELECT id FROM conditions WHERE value = '2')),
+
+    ((SELECT id FROM rules WHERE name = 'Минимальная звездность отеля 4'), (SELECT id FROM conditions WHERE value = '3')),
+    ((SELECT id FROM rules WHERE name = 'Минимальная звездность отеля 4'), (SELECT id FROM conditions WHERE value = '0')),
+
+    ((SELECT id FROM rules WHERE name = 'Комиссия в договоре не менее 10%'), (SELECT id FROM conditions WHERE value = '9'));
