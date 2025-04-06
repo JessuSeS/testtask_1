@@ -39,7 +39,7 @@
 - Если нужен фреймворк - выбираем Laravel.
 
 ### Запуск
-- Запуcкаем проект: docker compose up -d.
+- Запуcкаем проект: make up.
 - Проект доступен по адресу http://localhost/.
 - Админер для БД доступен по адресу: http://localhost:8080 (login: developer, password: 123).
 

@@ -1,16 +1,14 @@
 <?php
-define('MYSQL_HOST', 'mysql');
-define('MYSQL_USER', $_ENV['MYSQL_USER']);
-define('MYSQL_PASSWORD', $_ENV['MYSQL_PASSWORD']);
-define('MYSQL_DB', $_ENV['MYSQL_DATABASE']);
 
-$conn = new PDO('mysql:host='.MYSQL_HOST.';port=3306;dbname='.MYSQL_DB, MYSQL_USER, MYSQL_PASSWORD);
+require_once __DIR__ . '/vendor/autoload.php';
 
-$hotel_id = $_GET['hotel_id'] ?? 1; // отель для которого делаем проверку
+use App\Factory\ControllerFactory;
+use App\Router;
 
-echo '<ul>';
-foreach ($conn->query('SELECT * FROM `agencies`') as $row) {
-    echo '<li><strong>'.$row['id'].'</strong> '.$row['name'].'</li>';
+try {
+    $router = new Router(new ControllerFactory());
+    $router->dispatch($_SERVER['REQUEST_URI']);
+} catch (Throwable $e) {
+    echo '<PRE>';
+    echo $e;
 }
-echo '</ul>';
-?>
