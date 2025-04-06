@@ -8,7 +8,7 @@
 <body>
 <?php require_once __DIR__ . '/layouts/navbar.php'; ?>
 <h2>Добавить правило</h2>
-<form action="save_rule.php" method="post">
+<form action="/rules/save" method="post">
     <label for="agency_id">ID агентства:</label>
     <input type="number" id="agency_id" name="agency_id" required><br><br>
 

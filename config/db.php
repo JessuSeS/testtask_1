@@ -6,7 +6,7 @@ define('MYSQL_PASSWORD', getenv('MYSQL_PASSWORD') ?: '123');
 define('MYSQL_DB', getenv('MYSQL_DB') ?: 'php_test');
 
 try {
-    $conn = new PDO(
+    return new PDO(
         "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DB . ";charset=utf8mb4",
         MYSQL_USER,
         MYSQL_PASSWORD,

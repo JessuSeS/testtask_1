@@ -3,10 +3,10 @@
         <a href="/">Главная</a>
     </div>
     <div>
-        <a href="/rules.php">Форма правил</a>
+        <a href="/rules">Форма правил</a>
     </div>
     <div>
-        <a href="/conditions.php">Форма условий</a>
+        <a href="/conditions">Форма условий</a>
     </div>
 </nav>
 
